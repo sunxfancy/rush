@@ -356,6 +356,13 @@ struct rstr
 		return r_move(ret);
 	}
 
+	rstr reverse() const
+	{
+		rstr result=(*this);
+		r_reverse<uchar>(result.m_buf);
+		return result;
+	}
+
 	rbool erase(int begin,int end)
 	{
 		return m_buf.erase(begin,end);

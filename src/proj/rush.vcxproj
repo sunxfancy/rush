@@ -86,6 +86,7 @@
     <ClInclude Include="..\back\zasm.h" />
     <ClInclude Include="..\back\zbin.h" />
     <ClInclude Include="..\back\zgpp.h" />
+    <ClInclude Include="..\back\zjs.h" />
     <ClInclude Include="..\back\zvm.h" />
     <ClInclude Include="..\back\zjit.h" />
     <ClInclude Include="..\back\zjitb.h" />

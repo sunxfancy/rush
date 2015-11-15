@@ -8,6 +8,7 @@ namespace xf
 		X_SEEK_END=2,
 	};
 
+#ifndef _RJS
 	static void print(const char* s)
 	{
 		push s
@@ -15,6 +16,25 @@ namespace xf
 		calle "printf",8
 		add esp,8
 	}
+#else
+	final static void print(const char* s)
+	{
+		var temp="";
+		var addr=mem32[(esp+4)/4];
+		for(;mem8[addr]!=0;addr++)
+		{
+			temp+=String.fromCharCode(mem8[addr]);
+		}
+		document.writeln(temp);
+		esp+=8;
+	}
+	
+	final static void print_int(int a)
+	{
+		document.writeln(mem32[(esp+4)/4]);
+		esp+=8;
+	}
+#endif
 
 	static void vsnprintf(char* dst,int count,const char* f,char* args)
 	{
@@ -79,6 +99,7 @@ namespace xf
 		add esp,16
 	}
 
+#ifndef _RJS
 	static void itoa(void* dst,int n)
 	{
 		push n
@@ -87,7 +108,24 @@ namespace xf
 		calle "sprintf",12
 		add esp,12
 	}
+#else
+	static void itoa(void* dst,int n)
+	{
+		a=n.abs
+		rstr s
+		for
+			s+=(a%10+`0).tochar
+			a/=10
+			if a==0
+				break
+		s=s.reverse
+		if n<0
+			s='-'+s
+		strcpy(dst,s.cstr)
+	}
+#endif
 
+#ifndef _RJS
 	static void utoa(void* dst,uint n)
 	{
 		push n
@@ -96,6 +134,20 @@ namespace xf
 		calle "sprintf",12
 		add esp,12
 	}
+#else
+	static void utoa(void* dst,uint n)
+	{
+		a=n
+		rstr s
+		for
+			s+=(a%10+`0).tochar
+			a/=10
+			if a==0
+				break
+		s=s.reverse
+		strcpy(dst,s.cstr)
+	}
+#endif
 
 	static void dtoa(void* dst,double n)
 	{
@@ -152,6 +204,7 @@ namespace xf
 		add esp,4
 	}
 
+#ifndef _RJS
 	static uchar* malloc(int size)
 	{
 		push size
@@ -159,14 +212,76 @@ namespace xf
 		mov s_ret,eax
 		add esp,4
 	}
+#else
+	final static uchar* malloc(int size)
+	{
+		var size=mem32[(esp+4)/4]+4;
+		var count;
+		if(size%4096==0)
+		{
+			count=size/4096;
+		}
+		else
+		{
+			count=div(size,4096)+1;
+		}
+		for(var i=0;i<alloc_count.length;i++)
+		{
+			if(alloc_count[i]>0)
+			{
+				continue;
+			}
+			var find=0;
+			for(var j=i+1;j<alloc_count.length;j++)
+			{
+				if(j-i>=count)
+				{
+					find=1;
+					break;
+				}
+				if(alloc_count[j]>0)
+				{
+					break;
+				}
+			}
+			if(find==1)
+			{
+				for(var k=i;k<i+count;k++)
+				{
+					alloc_count[k]=1;
+				}
+				mem32[i*4096/4]=count;
+				mem32[(esp+8)/4]=i*4096+4;
+				esp+=8;
+				return;
+			}
+		}
+		mem32[(esp+8)/4]=0;
+		esp+=8;
+	}
+#endif
 
+#ifndef _RJS
 	static void free(void* p)
 	{
 		push p
 		calle "free",4
 		add esp,4
 	}
+#else
+	final static void free(void* p)
+	{
+		var q=mem32[(esp+4)/4]-4;
+		var count=mem32[q/4];
+		for(var i=0;i<count;i++)
+		{
+			alloc_count[i+q/4096]=0;
+		}
+		esp+=8;
+	}
+#endif
 
+#ifndef _RJS
 	static void memcpy(void* dst,const void* src,int size)
 	{
 		push size
@@ -175,7 +290,17 @@ namespace xf
 		calle "memcpy",12
 		add esp,12
 	}
+#else
+	static void memcpy(char* dst,const char* src,int size)
+	{
+		for i=0;i<size;i++ 
+			*dst=*src
+			dst++
+			src++
+	}
+#endif
 
+#ifndef _RJS
 	static int strlen(const char* s)
 	{
 		push s
@@ -183,6 +308,27 @@ namespace xf
 		mov s_ret,eax
 		add esp,4
 	}
+#else
+	static int strlen(const char* s)
+	{
+		sum=0
+		for ;!s->empty;s++
+			sum++
+		return sum
+	}
+#endif
+
+#ifndef _RJS
+#else
+	static void strcpy(char* dst,char* src)
+	{
+		for *src!=0
+			*dst=*src
+			dst++
+			src++
+		*dst=0
+	}
+#endif
 
 	static int strlenw(const wchar* p)
 	{

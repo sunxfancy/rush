@@ -206,5 +206,8 @@
     <ClInclude Include="..\xlib\xfs.h">
       <Filter>xlib</Filter>
     </ClInclude>
+    <ClInclude Include="..\back\zjs.h">
+      <Filter>back</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,13 +1,11 @@
 ﻿#pragma once
 
-#ifndef _RS
-#include "../xlib/xsock.h"
-#endif
 #include "../front/yclass.h"
 #include "../front/yformat.h"
 #include "zvm.h"
 #include "zjit.h"
 #include "zgpp.h"
+#include "zjs.h"
 
 //main函数进行参数解析
 struct zmain
@@ -41,6 +39,12 @@ struct zmain
 		elif(vparam[1]=="-nasm")
 		{
 			sh.m_mode=tsh::c_nasm;
+			sh.m_vdefine.insert_c(tmac(rstr("_RNASM")));
+		}
+		elif(vparam[1]=="-js")
+		{
+			sh.m_mode=tsh::c_js;
+			sh.m_vdefine.insert_c(tmac(rstr("_RJS")));
 			sh.m_vdefine.insert_c(tmac(rstr("_RNASM")));
 		}
 		else
@@ -127,6 +131,13 @@ struct zmain
 		elif(sh.m_mode==tsh::c_gpp)
 		{
 			ifn(zgpp::process(sh))
+			{
+				return false;
+			}
+		}
+		elif(sh.m_mode==tsh::c_js)
+		{
+			ifn(zjs::process(sh))
 			{
 				return false;
 			}

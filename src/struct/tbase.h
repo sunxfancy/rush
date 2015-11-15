@@ -619,6 +619,7 @@ struct tsh
 		c_jit,
 		c_nasm,
 		c_gpp,
+		c_js,
 	};
 
 	tsh()

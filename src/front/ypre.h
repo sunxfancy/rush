@@ -314,6 +314,12 @@ struct ypre
 				v[i+1].val=rsoptr(c_dot);
 				continue;
 			}
+			if(v.get(i-1).val==rsoptr(c_mul)&&v.get(i-2).val==rsoptr(c_sbk_l)&&
+				v.get(i+1).val==rsoptr(c_sbk_r))
+			{
+				v[i-1].clear();
+				continue;
+			}
 			v[i].val.clear();
 			v[i].multi+=rsoptr(c_sbk_l);
 			v[i].multi+=rsoptr(c_addr);
