@@ -177,6 +177,7 @@ struct xf
 #ifdef _MSC_VER
 		::Sleep(milliseconds);
 #else
+#ifndef __MINGW32__
 		if(milliseconds>2100000000)
 		{
 			::sleep(milliseconds/1000);
@@ -186,6 +187,7 @@ struct xf
 			::usleep(milliseconds*1000);
 		}
 #endif
+#endif
 	}
 
 	static int getch()
@@ -193,6 +195,7 @@ struct xf
 #ifdef _MSC_VER
 		return ::getch();
 #else
+#ifndef __MINGW32__
 		struct termios oldt,newt;
 		int ch;
 		::tcgetattr(STDIN_FILENO,&oldt);
@@ -202,6 +205,7 @@ struct xf
 		ch=::getchar();
 		::tcsetattr(STDIN_FILENO,TCSANOW,&oldt);
 		return ch;
+#endif
 #endif
 	}
 
@@ -235,6 +239,7 @@ struct xf
 		}
 		return false;
 #else
+#ifndef __MINGW32__
 		if(!get_cur_dir(buf,size))
 		{
 			return false;
@@ -244,6 +249,9 @@ struct xf
 		buf[len+1]='r';
 		buf[len+2]=0;
 		return true;
+#else
+		return GetModuleFileNameW(null,(wchar_t*)buf,size);
+#endif
 #endif
 #endif
 	}
@@ -262,6 +270,7 @@ struct xf
 		}
 		return false;
 #else
+#ifndef __MINGW32__
 		FILE* fp=popen("pwd","r");
 		if(fp==null)
 		{
@@ -280,6 +289,9 @@ struct xf
 		}
 		buf[i]=0;
 		return true;
+#else
+		return GetCurrentDirectoryW(size,(wchar_t*)buf);
+#endif
 #endif
 #endif
 	}
@@ -347,7 +359,11 @@ struct xf
 #ifdef _MSC_VER
 		return ::_ftelli64((FILE*)fp);
 #else
+#ifndef __MINGW32__
 		return ::ftello((FILE*)fp);
+#else
+		return ftell(fp);
+#endif
 #endif
 	}
 
@@ -361,7 +377,11 @@ struct xf
 #ifdef _MSC_VER
 		return ::_fseeki64((FILE*)fp,off,start);
 #else
+#ifndef __MINGW32__
 		return ::fseeko((FILE*)fp,off,start);
+#else
+		return fseek(fp,(int)off,start);
+#endif
 #endif
 	}
 
@@ -370,7 +390,11 @@ struct xf
 #ifdef _MSC_VER
 		return (void*)::_wfopen(name,mode);
 #else
+#ifndef __MINGW32__
 		return null;
+#else
+		return (void*)::_wfopen((wchar_t*)name,(wchar_t*)mode);
+#endif
 #endif
 	}
 
@@ -399,7 +423,11 @@ struct xf
 #ifdef _MSC_VER
 		return ::_wremove(name);
 #else
+#ifndef __MINGW32__
 		return 0;
+#else
+		return ::_wremove((wchar_t*)name);
+#endif
 #endif
 	}
 	
@@ -431,6 +459,7 @@ struct xf
 			return tid;
 		}
 #else
+#ifndef __MINGW32__
 		if(0!=::pthread_create((pthread_t*)&tid,null,start,param))
 		{
 			return 0;
@@ -440,6 +469,7 @@ struct xf
 			return tid;
 		}
 #endif
+#endif
 	}
 
 	static void wait_thr(int tid)
@@ -447,7 +477,9 @@ struct xf
 #ifdef _MSC_VER
 		::WaitForSingleObject((HANDLE)tid,INFINITE);
 #else
+#ifndef __MINGW32__
 		::pthread_join((pthread_t)tid,null);
+#endif
 #endif
 	}
 
@@ -527,6 +559,7 @@ struct xf
 #ifdef EMSCRIPTEN
 		return "rush -interpret src/example/test/10_1.rs";
 #else
+#ifndef __MINGW32__
 		static char temp[4096];
 		temp[0]=0;
 		for(int i=0;i<get_xf()->argc;i++)
@@ -535,6 +568,9 @@ struct xf
 			strcat(temp," ");
 		}
 		return temp;
+#else
+		return ::GetCommandLineA();
+#endif
 #endif
 #endif
 	}

@@ -29,5 +29,6 @@ del /F /Q ..\bin\rush_gpp.asm
 del /F /Q ..\bin\rush_nasm.asm
 del /F /Q ..\bin\rush_gpp.exe
 del /F /Q ..\bin\rush_nasm.exe
+del /F /Q ..\bin\rush_mingw.exe
 
 pause

@@ -15,9 +15,11 @@
 #include <process.h>
 #else
 #include <unistd.h>
+#ifndef __MINGW32__
 #include <termios.h>
 #include <pthread.h>
 #include <semaphore.h>
+#endif
 #endif
 
 #ifdef EMSCRIPTEN
@@ -27,9 +29,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
-#include <math.h>
 #include <stdarg.h>
 #include <string.h>
+
+#ifndef __MINGW32__
+#include <math.h>
+#else
+#include <windows.h>
+#endif
 
 #include <utility>
 #include <new>

@@ -153,7 +153,7 @@ struct zjs
 		return true;
 	}
 
-	static rstr opnd(tsh& sh,rbuf<rstr>& v)
+	static rstr opnd(tsh& sh,const rbuf<rstr>& v)
 	{
 		if(v.count()==1)
 		{
@@ -178,7 +178,7 @@ struct zjs
 		return rstr();
 	}
 
-	static rstr opnd_u(tsh& sh,rbuf<rstr>& v)
+	static rstr opnd_u(tsh& sh,const rbuf<rstr>& v)
 	{
 		if(v.count()==1)
 		{
@@ -203,7 +203,7 @@ struct zjs
 		return rstr();
 	}
 	
-	static rstr opnd_8(rbuf<rstr>& v)
+	static rstr opnd_8(const rbuf<rstr>& v)
 	{
 		if(v.count()==3)
 		{

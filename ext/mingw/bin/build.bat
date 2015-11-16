@@ -1,6 +1,6 @@
 @echo off
 rem del /F /Q 1.exe
 cd %~dp0\
-.\g++.exe ..\..\%1 %3 -o ..\..\%2 -static
+.\g++.exe ..\..\%1 %3 -o ..\..\%2 -static -std=c++11 -w
 rem cd ..\..\..\bin\
 rem 1.exe

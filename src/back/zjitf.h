@@ -101,17 +101,23 @@ struct zjitf
 	//当返回double时X86的ABI是通过xmm返回
 	static void sin(double a,double* b)
 	{
+#ifndef __MINGW32__
 		*b=::sin(a);
+#endif
 	}
 
 	static void cos(double a,double* b)
 	{
+#ifndef __MINGW32__
 		*b=::cos(a);
+#endif
 	}
 
 	static void sqrt(double a,double* b)
 	{
+#ifndef __MINGW32__
 		*b=::sqrt(a);
+#endif
 	}
 
 	static void* get_hins()
