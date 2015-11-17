@@ -1,5 +1,13 @@
 ﻿import xbase.rs
 
+#ifdef _RJS
+int printf(const char* s,int a)
+{
+	xf.print_int(a)
+	return 0
+}
+#endif
+
 namespace xf
 {
 	enum
@@ -257,7 +265,7 @@ namespace xf
 	final static uchar* malloc(int size)
 	{
 		mem32(esp+8)=(int)malloc(mem32(esp+4));
-		esp+=8;
+		esp+=8;
 	}
 #endif
 #else

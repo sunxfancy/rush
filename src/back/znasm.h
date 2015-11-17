@@ -54,6 +54,7 @@ struct znasm
 		head+="endproc\n";
 		head+="proc _rs_main\n";
 		head+="locals none\n";
+		head+="	ret\n";
 	
 		head+=result;
 		head+="\n";
