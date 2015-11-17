@@ -1,7 +1,14 @@
 ﻿------------------------------------------------------------------
 
+Rush v0.12 alpha :
+
+1.add C++ backend, translate Rush to ASM, then to C++
+2.support local varible array (like C)
+
+------------------------------------------------------------------
+
 Rush v0.11 alpha :
 
-1.add JS backend, can be translate Rush to JS code(don't need emscripten)
+1.add JS backend, can be translate Rush to JS code (don't need emscripten)
 
 ------------------------------------------------------------------

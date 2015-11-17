@@ -41,54 +41,30 @@ struct rstr
 
 	rstr(int i)
 	{
-#ifndef _RS
 		char tmp[32];
 		xf::itoa(tmp,i);
 		set(tmp);
-#else
-		rbuf<char> tmp(32);
-		xf::itoa(tmp.begin(),i);
-		set(tmp.begin());
-#endif
 	}
 
 	rstr(uint i)
 	{
-#ifndef _RS
 		char tmp[32];
 		xf::utoa(tmp,i);
 		set(tmp);
-#else
-		rbuf<char> tmp(32);
-		xf::utoa(tmp.begin(),i);
-		set(tmp.begin());
-#endif
 	}
 
 	rstr(double i)
 	{
-#ifndef _RS
 		char tmp[128];
 		xf::dtoa(tmp,i);
 		set(tmp);
-#else
-		rbuf<char> tmp(128);
-		xf::dtoa(tmp.begin(),i);
-		set(tmp.begin());
-#endif
 	}
 
 	rstr(int64 i)
 	{
-#ifndef _RS
 		char tmp[128];
 		xf::int64toa(tmp,i);
 		set(tmp);
-#else
-		rbuf<char> tmp(128);
-		xf::int64toa(tmp.begin(),i);
-		set(tmp.begin());
-#endif
 	}
 
 	rstr(const rstr& s)

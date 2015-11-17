@@ -208,9 +208,7 @@ struct znasm
 			if(ybase::is_tag<rstr>(tfi.vasm[i].vstr))
 			{
 				//todo:_func_end标号有时不是必须的
-				result+=symbol+"_"+tfi.vasm[i].vstr[0];
-				result+=tfi.vasm[i].vstr[1];
-				result+="\n";
+				result+=symbol+"_"+tfi.vasm[i].vstr[0]+":\n";
 				continue;
 			}
 			rstr s;

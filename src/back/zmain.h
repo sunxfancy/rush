@@ -6,6 +6,7 @@
 #include "zjit.h"
 #include "zgpp.h"
 #include "zjs.h"
+#include "zcpp.h"
 
 //main函数进行参数解析
 struct zmain
@@ -45,6 +46,12 @@ struct zmain
 		{
 			sh.m_mode=tsh::c_js;
 			sh.m_vdefine.insert_c(tmac(rstr("_RJS")));
+			sh.m_vdefine.insert_c(tmac(rstr("_RNASM")));
+		}
+		elif(vparam[1]=="-cpp")
+		{
+			sh.m_mode=tsh::c_cpp;
+			sh.m_vdefine.insert_c(tmac(rstr("_RCPP")));
 			sh.m_vdefine.insert_c(tmac(rstr("_RNASM")));
 		}
 		else
@@ -138,6 +145,13 @@ struct zmain
 		elif(sh.m_mode==tsh::c_js)
 		{
 			ifn(zjs::process(sh))
+			{
+				return false;
+			}
+		}
+		elif(sh.m_mode==tsh::c_cpp)
+		{
+			ifn(zcpp::process(sh))
 			{
 				return false;
 			}

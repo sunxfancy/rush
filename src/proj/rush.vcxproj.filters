@@ -209,5 +209,8 @@
     <ClInclude Include="..\back\zjs.h">
       <Filter>back</Filter>
     </ClInclude>
+    <ClInclude Include="..\back\zcpp.h">
+      <Filter>back</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

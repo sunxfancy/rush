@@ -275,9 +275,16 @@ struct zgpp
 		{
 			if(!ybase::is_quote(tfi.local[i].type)&&tfi.local[i].name!=rskey(c_pmain))
 			{
-				result+="	";
-				result+=type_trans(tfi.local[i].type)+" "+tfi.local[i].name;
-				result+=";\n";
+				rstr temp=type_trans(tfi.local[i].type)+" "+tfi.local[i].name;
+				if(tfi.local[i].count>1)
+				{
+					result+="	"+temp+"_["+tfi.local[i].count+"];\n";
+					result+="	"+type_trans(tfi.local[i].type)+"& "+tfi.local[i].name+"=*"+tfi.local[i].name+"_;\n";
+				}
+				else
+				{
+					result+="	"+temp+";\n";
+				}
 			}
 		}
 		result+="\n";

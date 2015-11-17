@@ -9,6 +9,7 @@ namespace xf
 	};
 
 #ifndef _RJS
+#ifndef _RCPP
 	static void print(const char* s)
 	{
 		push s
@@ -16,6 +17,21 @@ namespace xf
 		calle "printf",8
 		add esp,8
 	}
+	
+	static void print_int(int a)
+	{
+		push a
+		push "%d\n"
+		calle "printf",8
+		add esp,8
+	}
+#else
+	final static void print(const char* s)
+	{
+		printf("%s",mem32(esp+4));
+		esp+=8;
+	}
+#endif
 #else
 	final static void print(const char* s)
 	{
@@ -100,6 +116,7 @@ namespace xf
 	}
 
 #ifndef _RJS
+#ifndef _RCPP
 	static void itoa(void* dst,int n)
 	{
 		push n
@@ -108,6 +125,13 @@ namespace xf
 		calle "sprintf",12
 		add esp,12
 	}
+#else
+	final static void itoa(void* dst,int n)
+	{
+		sprintf((CHAR*)mem32(esp+4),"%d",mem32(esp+8));
+		esp+=12;
+	}
+#endif
 #else
 	static void itoa(void* dst,int n)
 	{
@@ -126,6 +150,7 @@ namespace xf
 #endif
 
 #ifndef _RJS
+#ifndef _RCPP
 	static void utoa(void* dst,uint n)
 	{
 		push n
@@ -134,6 +159,13 @@ namespace xf
 		calle "sprintf",12
 		add esp,12
 	}
+#else
+	final static void utoa(void* dst,uint n)
+	{
+		sprintf((CHAR*)mem32(esp+4),"%u",mem32(esp+8));
+		esp+=12;
+	}
+#endif
 #else
 	static void utoa(void* dst,uint n)
 	{
@@ -197,14 +229,23 @@ namespace xf
 		add esp,8
 	}
 
+#ifndef _RCPP
 	static void exit(int a)
 	{
 		push a
 		calle "exit",4
 		add esp,4
 	}
+#else
+	final static void exit(int a)
+	{
+		exit(mem32(esp+4));
+		esp+=8;
+	}
+#endif
 
 #ifndef _RJS
+#ifndef _RCPP
 	static uchar* malloc(int size)
 	{
 		push size
@@ -212,6 +253,13 @@ namespace xf
 		mov s_ret,eax
 		add esp,4
 	}
+#else
+	final static uchar* malloc(int size)
+	{
+		mem32(esp+8)=(int)malloc(mem32(esp+4));
+		esp+=8;
+	}
+#endif
 #else
 	final static uchar* malloc(int size)
 	{
@@ -262,12 +310,20 @@ namespace xf
 #endif
 
 #ifndef _RJS
+#ifndef _RCPP
 	static void free(void* p)
 	{
 		push p
 		calle "free",4
 		add esp,4
 	}
+#else
+	final static void free(void* p)
+	{
+		free((VOID*)mem32(esp+4));
+		esp+=8;
+	}
+#endif
 #else
 	final static void free(void* p)
 	{
@@ -282,6 +338,7 @@ namespace xf
 #endif
 
 #ifndef _RJS
+#ifndef _RCPP
 	static void memcpy(void* dst,const void* src,int size)
 	{
 		push size
@@ -290,6 +347,13 @@ namespace xf
 		calle "memcpy",12
 		add esp,12
 	}
+#else
+	final static void memcpy(void* dst,const void* src,int size)
+	{
+		memcpy((CHAR*)mem32(esp+4),(CHAR*)mem32(esp+8),mem32(esp+12));
+		esp+=16;
+	}
+#endif
 #else
 	static void memcpy(char* dst,const char* src,int size)
 	{
@@ -301,6 +365,7 @@ namespace xf
 #endif
 
 #ifndef _RJS
+#ifndef _RCPP
 	static int strlen(const char* s)
 	{
 		push s
@@ -317,9 +382,16 @@ namespace xf
 		return sum
 	}
 #endif
-
-#ifndef _RJS
 #else
+	static int strlen(const char* s)
+	{
+		sum=0
+		for ;!s->empty;s++
+			sum++
+		return sum
+	}
+#endif
+
 	static void strcpy(char* dst,char* src)
 	{
 		for *src!=0
@@ -328,7 +400,6 @@ namespace xf
 			src++
 		*dst=0
 	}
-#endif
 
 	static int strlenw(const wchar* p)
 	{

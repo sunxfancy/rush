@@ -295,7 +295,7 @@ struct tdata
 		type.clear();
 		name.clear();
 		size=0;
-		count=0;
+		count=1;
 		off=0;
 		param.clear();
 	}
@@ -620,6 +620,7 @@ struct tsh
 		c_nasm,
 		c_gpp,
 		c_js,
+		c_cpp,
 	};
 
 	tsh()

@@ -59,7 +59,7 @@ struct ysent
 		//如 0.toint -> int(0).toint
 		// "abc"+a  ->  rstr("abc")+a
 		yrep::const_replace(sh,tfi.vsent);
-		//找到直接定义的局部变量
+		//找到直接定义的局部变量，不需要判断返回值
 		yrep::local_var_replace(sh,tfi);
 		//函数指针常量替换
 		yrep::fpoint_replace(sh,tfi);
@@ -294,7 +294,7 @@ struct ysent
 		int off=c_point_size;
 		for(int i=0;i<local.count();++i)
 		{
-			local[i].size=yfind::get_type_size(sh,local[i].type);
+			local[i].size=yfind::get_type_size(sh,local[i].type)*local[i].count;
 			local[i].off=off;
 			off+=yfind::get_ceil_space(local[i]);
 		}

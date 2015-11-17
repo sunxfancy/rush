@@ -75,7 +75,7 @@ struct yadd
 
 	static void add_structor_func(const tsh& sh,const tdata& tdi,rbuf<tword>& v)
 	{
-		if(ybase::is_quote(tdi.type))
+		if(ybase::is_quote(tdi.type)||tdi.count>1)
 		{
 			return;
 		}
@@ -98,7 +98,8 @@ struct yadd
 	static void add_destructor_func(const tsh& sh,const tclass& tci,const tdata& tdi,
 		rbuf<tword>& v,bool is_memb)
 	{
-		if(ybase::is_quote(tdi.type))
+		//类似int arr[10]的传统C数组定义不调用析构和构造函数
+		if(ybase::is_quote(tdi.type)||tdi.count>1)
 		{
 			return;
 		}

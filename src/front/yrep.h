@@ -372,6 +372,35 @@ struct yrep
 		return true;
 	}
 
+	static void array_var_replace(const tsh& sh,const rstr& name,tfunc& tfi)
+	{
+		for(int i=0;i<tfi.vsent.count();i++)
+		{
+			if(sh.m_key.is_asm_ins(tfi.vsent[i].vword.get_bottom().val))
+			{
+				continue;
+			}
+			array_var_replace_v(sh,name,tfi.vsent[i].vword);
+		}
+	}
+
+	static void array_var_replace_v(const tsh& sh,const rstr& name,rbuf<tword>& v)
+	{
+		for(int j=0;j<v.count();j++)
+		{
+			if(v[j].val!=name)
+			{
+				continue;
+			}
+			v[j].multi+=rsoptr(c_sbk_l);
+			v[j].multi+=rsoptr(c_addr);
+			v[j].multi+=v[j].val;
+			v[j].multi+=rsoptr(c_sbk_r);
+			v[j].val.clear();
+		}
+		ybase::arrange(v);
+	}
+
 	static rbool local_var_replace(const tsh& sh,tfunc& tfi)
 	{
 		for(int i=0;i<tfi.vsent.count();i++)
@@ -407,6 +436,11 @@ struct yrep
 		if(v.count()==2)
 		{
 			v[1].val.clear();//清除未初始化的变量定义
+		}
+		elif(v.count()==5&&v[2].val==rsoptr(c_mbk_l))
+		{
+			ybase::clear_word_val(v,1,5);
+			array_var_replace(sh,tdi.name,tfi);
 		}
 		//如int a(1)这样的定义千万不能重复调用构造函数
 		rbool bstruct=v.count()>2&&v[2].val==rsoptr(c_sbk_l);

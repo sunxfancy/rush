@@ -597,6 +597,12 @@ struct ymemb
 			{
 				return false;
 			}
+			if(ditem.count>1)
+			{
+				//todo 如果该类型的指针没有事先定义会出错
+				ditem.type="rp<"+ditem.type+">";
+				ditem.count=1;
+			}
 			item.param.push(ditem);
 		}
 		return true;
