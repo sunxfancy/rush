@@ -1,5 +1,11 @@
 ﻿------------------------------------------------------------------
 
+Rush v0.13 alpha :
+
+1.add C front end, using IDA translate EXE to C, then translate C to Rush，then translate Rush to JS。（only support simple code now）
+
+------------------------------------------------------------------
+
 Rush v0.12 alpha :
 
 1.add C++ backend, translate Rush to ASM, then to C++

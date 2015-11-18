@@ -78,4 +78,5 @@ rbool build_one(tsh& sh,rset<tfunc>& sfunc,tfunc& tfi,rstr& result):
 			return false
 	result+=ybase.vword_to_s(tfi.vword)
 	result+='\n'
+	tfi.vword.clear
 	return true
